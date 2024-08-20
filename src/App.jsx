@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './App.css'
+import axios from 'axios';  // Importar axios para la solicitud HTTP
+import './App.css';
 import { db } from './firebase/firebase.js';
-import {collection,addDoc,getDocs,updateDoc,deleteDoc,doc,} from 'firebase/firestore';
+import { collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'firebase/firestore';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 
@@ -15,10 +16,14 @@ function App() {
   const [precio, setPrecio] = useState('');
   const [categoria, setCategoria] = useState('');
   const [editando, setEditando] = useState(null);
+  const [pokemon, setPokemon] = useState(null);  // Estado para los datos de Pikachu
+  const [loadingPokemon, setLoadingPokemon] = useState(true);  // Estado de carga para Pokémon
+  const [errorPokemon, setErrorPokemon] = useState(null);  // Estado para errores de Pokémon
 
   const productosCollectionRef = collection(db, 'productos');
 
   useEffect(() => {
+    // Obtener productos de Firestore
     const obtenerProductos = async () => {
       const productosData = await getDocs(productosCollectionRef);
       setProductos(productosData.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
@@ -27,13 +32,29 @@ function App() {
     obtenerProductos();
   }, []);
 
+  useEffect(() => {
+    // Obtener datos de Pikachu de la PokeAPI
+    const fetchPokemon = async () => {
+      try {
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon/pikachu');
+        setPokemon(response.data);
+        setLoadingPokemon(false);
+      } catch (err) {
+        setErrorPokemon(err);
+        setLoadingPokemon(false);
+      }
+    };
+
+    fetchPokemon();
+  }, []);
+
   const agregarProducto = async () => {
     if (!nombre || !cantidad || !precio || !categoria) return;
 
     const nuevoProducto = {
       nombre,
       cantidad: parseInt(cantidad),
-      precio: parseFloat(precio), 
+      precio: parseFloat(precio),
       categoria,
     };
 
@@ -66,7 +87,7 @@ function App() {
     await updateDoc(productoDoc, {
       nombre,
       cantidad: parseInt(cantidad),
-      precio: parseFloat(precio), 
+      precio: parseFloat(precio),
       categoria,
     });
 
@@ -146,7 +167,6 @@ function App() {
         )}
       </div>
 
-
       <table border="1" style={{ marginTop: '20px', width: '100%' }}>
         <thead>
           <tr>
@@ -178,6 +198,31 @@ function App() {
       <div style={{ marginTop: '50px' }}>
         <h2>Objetos por categoria</h2>
         <Bar data={obtenerDatosGrafica()} />
+      </div>
+
+      {/* Mostrar Pikachu */}
+      <div style={{ marginTop: '50px',
+        backgroundColor: '#a5a562', // Fondo amarillo claro
+        padding: '20px',           // Espaciado interno
+        borderRadius: '8px',       // Bordes redondeados
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Sombra suave
+        textAlign: 'center'        // Centrar el texto y el contenido
+      }}>
+        <h2>Pikachu</h2>
+        {loadingPokemon ? (
+          <p>Loading Pikachu...</p>
+        ) : errorPokemon ? (
+          <p>Error: {errorPokemon.message}</p>
+        ) : pokemon ? (
+          <div>
+            <h3>{pokemon.name.toUpperCase()}</h3>
+            <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+            <p>Height: {pokemon.height / 10} meters</p>
+            <p>Weight: {pokemon.weight / 10} kg</p>
+          </div>
+        ) : (
+          <p>No data</p>
+        )}
       </div>
     </div>
   );
