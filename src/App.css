@@ -1,0 +1,113 @@
+#root {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0%;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  margin-top: 20px;
+  color: #fff;
+}
+
+.container {
+  width: 80%;
+  margin: 20px auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  color: #fff;
+}
+
+th {
+  background-color: #444;
+}
+
+tr:nth-child(even) {
+  background-color: #2b2b2b;
+}
+
+tr:hover {
+  background-color: #555;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  margin: 1% ;
+  border-radius: 2%;
+  font-size: 3%;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  padding: 10px;
+  margin: 10px 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: calc(100% - 22px);
+  background-color: #333;
+  color: #fff;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background-color: #222;
+  padding: 10px 20px;
+}
+
+.navbar a {
+  color: #fff;
+  text-decoration: none;
+  padding: 10px;
+  font-size: 18px;
+}
+
+.navbar a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.icon-button:hover {
+  color: #007bff;
+}
+
+.AgregarBTN{
+  background-color: 343434 ;
+}
